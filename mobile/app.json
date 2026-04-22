@@ -1,0 +1,39 @@
+{
+  "expo": {
+    "name": "idas-scene-ai",
+    "slug": "idas-scene-ai",
+    "scheme": "idas",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0b0f19"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.theruka.idas",
+      "infoPlist": {
+        "NSCameraUsageDescription": "Capture frames for on-device scene analysis."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#0b0f19"
+      },
+      "package": "com.theruka.idas",
+      "permissions": ["CAMERA"]
+    },
+    "web": {
+      "bundler": "metro"
+    },
+    "plugins": ["expo-router"],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
