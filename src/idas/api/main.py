@@ -16,6 +16,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from idas import __version__
+from idas.api.deps import get_alert_bus, get_runner_registry
 from idas.api.routes import alerts, detect, health, licenses, rules, streams
 from idas.config import settings
 from idas.storage.database import init_db
@@ -31,7 +32,16 @@ async def _lifespan(app: FastAPI) -> AsyncIterator[None]:
     # Materialize tables up front so the first request isn't the one that
     # pays the CREATE TABLE tax.
     init_db()
-    yield
+    try:
+        yield
+    finally:
+        # Shutdown order matters: stop the runners first (they might still
+        # want to publish a final close event), then close the bus so any
+        # live SSE subscribers drop cleanly.
+        registry = get_runner_registry()
+        await registry.shutdown_all()
+        bus = get_alert_bus()
+        await bus.close()
 
 
 def create_app() -> FastAPI:

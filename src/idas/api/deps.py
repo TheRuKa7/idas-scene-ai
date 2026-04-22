@@ -10,6 +10,8 @@ from collections.abc import Iterator
 from functools import lru_cache
 from typing import TYPE_CHECKING
 
+from idas.api.alert_bus import AlertBus
+from idas.api.runner_registry import RunnerRegistry
 from idas.pipeline.detector import BaseDetector, DetectorConfig
 from idas.pipeline.tracker import BaseTracker
 from idas.runtime import build_detector, build_tracker
@@ -60,3 +62,24 @@ def make_detector(labels: list[str]) -> BaseDetector:
 
 def make_tracker() -> BaseTracker:
     return build_tracker()
+
+
+# ---- process-wide singletons ---------------------------------------------------
+# These are created the first time a route asks for them, and torn down
+# on app shutdown via the lifespan handler in api/main.py.
+
+
+@lru_cache(maxsize=1)
+def get_alert_bus() -> AlertBus:
+    return AlertBus()
+
+
+@lru_cache(maxsize=1)
+def get_runner_registry() -> RunnerRegistry:
+    return RunnerRegistry(get_alert_bus())
+
+
+def reset_singletons_for_tests() -> None:
+    """Clear bus + registry caches so tests start with fresh state."""
+    get_alert_bus.cache_clear()
+    get_runner_registry.cache_clear()

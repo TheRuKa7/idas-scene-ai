@@ -21,11 +21,19 @@ os.environ.setdefault("IDAS_DATA_DIR", _tmp_data)
 
 @pytest.fixture(autouse=True)
 def _isolate_db(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Iterator[None]:
-    """Point every test at its own SQLite file + reset the cached engine."""
+    """Point every test at its own SQLite file + reset cached singletons.
+
+    The runner registry and alert bus are process-wide singletons cached on
+    first access. Tests must start fresh or subscriber queues / runner
+    handles leak across cases.
+    """
     db_url = f"sqlite:///{(tmp_path / 'test.db').as_posix()}"
     monkeypatch.setenv("IDAS_DB_URL", db_url)
+    from idas.api.deps import reset_singletons_for_tests
     from idas.storage.database import reset_engine_for_tests
 
     reset_engine_for_tests()
+    reset_singletons_for_tests()
     yield
     reset_engine_for_tests()
+    reset_singletons_for_tests()
