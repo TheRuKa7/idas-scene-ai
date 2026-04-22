@@ -1,0 +1,75 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.pyright/
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover
+.hypothesis/
+
+# uv
+.uv/
+
+# Node / Next.js
+node_modules/
+.next/
+out/
+.env.local
+.env.*.local
+*.tsbuildinfo
+.turbo/
+
+# Models & weights (too big for git)
+weights/
+*.onnx
+*.pt
+*.pth
+*.safetensors
+*.engine
+
+# Data / outputs
+data/
+outputs/
+runs/
+samples/*.mp4
+!samples/README.md
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets
+.env
+*.pem
+*.key

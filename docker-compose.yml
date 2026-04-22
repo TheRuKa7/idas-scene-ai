@@ -1,0 +1,12 @@
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - IDAS_LICENSE_MODE=standard
+      - IDAS_LOG_LEVEL=info
+    volumes:
+      - ./weights:/app/weights
+      - ./data:/app/data
+    restart: unless-stopped
